@@ -188,8 +188,21 @@ if st.button("Calculate"):
     # Apply friend bonus
     price *= (1 + friend_bonus_percent[friend_bonus_choice])
     
-    st.success(
-        f"{crop} ({weight:.2f} kg, normal range {base_weight}-{max_weight} kg) "
-        f"with {mutation} mutation, weather {weather_base}/{weather_special}, "
-        f"and friend bonus {friend_bonus_choice} sells for {price:,.0f} coins"
+    # Custom styled result (white text, cream box)
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#2E2E2E;
+            padding:15px;
+            border-radius:10px;
+            border: 1px solid #ddd;
+            color: #FDF5E6;
+            font-size:18px;">
+            <b>{crop}</b> ({weight:.2f} kg, normal range {base_weight}-{max_weight} kg)  
+            with <b>{mutation}</b> mutation, weather <b>{weather_base}/{weather_special}</b>,  
+            and friend bonus <b>{friend_bonus_choice}</b> sells for  
+            <span style="font-size:22px; color:#FFD700;">{price:,.0f} coins</span>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
