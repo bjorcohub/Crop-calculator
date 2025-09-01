@@ -1,45 +1,93 @@
 import streamlit as st
 
-# Custom styles
+# Custom CSS
 page_bg = """
 <style>
+    /* Whole app background */
     .stApp {
-        background-color: #3F6F17; /* Dark green background */
+        background-color: #3F6F17; /* Dark green */
         color: #F5F5DC; /* Cream text */
     }
 
     /* Calculator box */
     .calculator-box {
-        background-color: #3B322B; /* Brown from your second image */
+        background-color: #3B322B; /* Brown */
         padding: 30px;
         border-radius: 15px;
         box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
     }
 
-    /* Make all text inside calculator white/cream */
+    /* Force text color inside box */
     .calculator-box * {
         color: #F5F5DC !important;
     }
+
+    /* Dropdowns, number inputs, text inputs */
+    .stSelectbox div[data-baseweb="select"],
+    .stNumberInput input,
+    .stTextInput input {
+        background-color: #3B322B !important;
+        color: #F5F5DC !important;
+        border: 1px solid #F5F5DC !important;
+        border-radius: 8px;
+        padding: 6px;
+    }
+
+    /* Dropdown menu items */
+    .stSelectbox div[role="listbox"] div {
+        background-color: #3B322B !important;
+        color: #F5F5DC !important;
+    }
+
+    /* Buttons */
+    .stButton > button {
+        background-color: #3B322B !important;
+        color: #F5F5DC !important;
+        border: 2px solid #F5F5DC !important;
+        border-radius: 8px;
+        padding: 8px 20px;
+        font-weight: bold;
+    }
+
+    .stButton > button:hover {
+        background-color: #5C4A3D !important; /* lighter brown */
+        border-color: #FFF8DC !important; /* lighter cream */
+    }
+
+    /* Success / warning / error boxes */
+    .stSuccess {
+        background-color: #2F4F2F !important;
+        color: #F5F5DC !important;
+    }
+    .stWarning {
+        background-color: #5C4A3D !important;
+        color: #FFF8DC !important;
+    }
+    .stError {
+        background-color: #8B0000 !important;
+        color: #FFF5EE !important;
+    }
 </style>
 """
-
 st.markdown(page_bg, unsafe_allow_html=True)
 
-# Wrap calculator UI in the styled box
+# Calculator UI
 with st.container():
     st.markdown('<div class="calculator-box">', unsafe_allow_html=True)
 
     st.header("🌱 Crop Calculator")
     st.write("Select your crop, enter weight, and apply bonuses.")
 
-    # Example inputs (replace with your existing code)
+    # Example inputs
     crop = st.selectbox("Choose a crop:", ["Carrot", "Tomato", "Pumpkin"])
     weight = st.number_input("Enter weight (kg)", min_value=0.0, step=0.01)
     bonus = st.selectbox("Friend Bonus", ["0%", "10%", "20%", "30%", "40%", "50%"])
 
-    st.success(f"Results: {crop} at {weight}kg with {bonus} bonus!")
+    if st.button("Calculate"):
+        st.success(f"Results: {crop} at {weight}kg with {bonus} bonus!")
 
     st.markdown('</div>', unsafe_allow_html=True)
+
 
 
 # Corrected price-per-kg table
