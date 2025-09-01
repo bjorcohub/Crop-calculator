@@ -147,7 +147,7 @@ base_weight, max_weight = weights[crop]
 weight = st.number_input(
     "Enter weight (kg)",
     value=float(base_weight),
-    step=0.01,
+    step=1.00,
     format="%.3f"
 )
 
