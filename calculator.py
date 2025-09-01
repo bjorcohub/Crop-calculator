@@ -101,16 +101,17 @@ st.title("Crop Sell Price Calculator 🌾")
 crop = st.selectbox("Select a crop", list(prices.keys()))
 
 # Get default weight from base value
-base_weight, max_weight = weights[crop]
+base_weight, max_weight = [float(x) for x in weights[crop]]
 
 # Weight input defaults to base value
 weight = st.number_input(
     "Enter weight (kg)", 
-    min_value=base_weight, 
-    max_value=max_weight, 
-    value=base_weight, 
+    min_value=float(base_weight), 
+    max_value=float(max_weight), 
+    value=float(base_weight), 
     step=0.01
 )
+
 
 # Mutation selection
 mutation = st.selectbox("Select mutation", list(mutations.keys()))
