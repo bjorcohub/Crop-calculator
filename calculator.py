@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Corrected price-per-kg table
+# Corrected price-per-kg table based on base sell price / base weight
 prices = {
     "Carrot": 18 / 0.1,
     "Strawberry": 14 / 0.05,
@@ -30,14 +30,24 @@ prices = {
     "Starweaver": 10000000 / 10.0
 }
 
+# Mutations multipliers
 mutations = {
     "None": 1,
     "Golden": 25,
     "Rainbow": 50
 }
 
-weather = ["None", "Wet", "Chilled", "Frozen", "Dawnlit", "Ambershine"]
+# Weather multipliers
+weather_multipliers = {
+    "None": 1,
+    "Wet": 2,
+    "Chilled": 2,
+    "Frozen": 10,
+    "Dawnlit": 2,
+    "Ambershine": 5
+}
 
+# Combined rules for special stacking
 combined_weather = {
     ("Wet", "Dawnlit"): 3,
     ("Chilled", "Dawnlit"): 3,
@@ -59,7 +69,7 @@ weight = st.number_input("Enter weight (kg)", min_value=0.01, value=1.0, step=0.
 mutation = st.selectbox("Select mutation", list(mutations.keys()))
 
 # Weather selections
-weather_base = st.selectbox("Select base weather", weather)
+weather_base = st.selectbox("Select base weather", ["None", "Wet", "Chilled", "Frozen"])
 weather_special = st.selectbox("Select special weather", ["None", "Dawnlit", "Ambershine"])
 
 # Calculate button
@@ -71,10 +81,10 @@ if st.button("Calculate"):
     
     # Apply weather multiplier
     if weather_base != "None" and weather_special != "None":
-        price *= combined_weather.get((weather_base, weather_special), weather[weather_base] * weather[weather_special])
+        price *= combined_weather.get((weather_base, weather_special), weather_multipliers[weather_base] * weather_multipliers[weather_special])
     elif weather_base != "None":
-        price *= weather[weather_base]
+        price *= weather_multipliers[weather_base]
     elif weather_special != "None":
-        price *= weather[weather_special]
+        price *= weather_multipliers[weather_special]
     
     st.success(f"{crop} ({weight:.2f} kg) with {mutation} mutation and weather {weather_base}/{weather_special} sells for {price:,.0f} coins")
