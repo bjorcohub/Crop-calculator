@@ -1,16 +1,43 @@
 import streamlit as st
 
-# Custom background color (dark green from your image)
+# Custom background + text color
 page_bg = """
 <style>
     .stApp {
-        background-color: #3F6F17; /* hex color extracted from your image */
+        background-color: #3F6F17; /* dark green background */
+        color: #FFFFFF; /* make text white */
+    }
+    /* Make selectbox, number_input, button labels white */
+    label, .stSelectbox label, .stNumberInput label {
+        color: #FFFFFF !important;
+    }
+    /* Success / warning messages */
+    .stSuccess {
+        color: #FFFFFF !important; /* white text inside success */
+        background-color: #2e7d32 !important; /* darker green for contrast */
+    }
+    .stWarning {
+        color: #000000 !important; /* black text on warning for readability */
+        background-color: #ffeb3b !important;
+    }
+    /* Dropdown text color fix */
+    .stSelectbox div[data-baseweb="select"] span {
+        color: #000000 !important; /* black inside dropdown */
+    }
+    /* Button styling */
+    .stButton button {
+        background-color: #444 !important;
+        color: #fff !important;
+        border-radius: 8px;
+        border: none;
+    }
+    .stButton button:hover {
+        background-color: #666 !important;
+        color: #fff !important;
     }
 </style>
 """
-
 st.markdown(page_bg, unsafe_allow_html=True)
-
 
 
 # Corrected price-per-kg table
@@ -119,11 +146,10 @@ base_weight, max_weight = weights[crop]
 # Weight input (no enforced limits)
 weight = st.number_input(
     "Enter weight (kg)",
-    value=float(base_weight),  # force float to avoid mixed types
+    value=float(base_weight),
     step=0.01,
     format="%.3f"
 )
-
 
 # Check if weight is outside expected range
 if weight < base_weight:
