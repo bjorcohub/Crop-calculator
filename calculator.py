@@ -100,18 +100,22 @@ st.title("Crop Sell Price Calculator 🌾")
 # Crop selection
 crop = st.selectbox("Select a crop", list(prices.keys()))
 
-# Get default weight from base value
-base_weight, max_weight = [float(x) for x in weights[crop]]
+# Default weight suggestion
+base_weight, max_weight = weights[crop]
 
-# Weight input defaults to base value
+# Weight input (no enforced limits)
 weight = st.number_input(
-    "Enter weight (kg)", 
-    min_value=float(base_weight), 
-    max_value=float(max_weight), 
-    value=float(base_weight), 
-    step=0.01
+    "Enter weight (kg)",
+    value=base_weight,
+    step=0.01,
+    format="%.3f"
 )
 
+# Check if weight is outside expected range
+if weight < base_weight:
+    st.warning(f"⚠️ This weight is below the normal base weight for {crop} ({base_weight} kg).")
+elif weight > max_weight:
+    st.warning(f"⚠️ This weight is above the normal max weight for {crop} ({max_weight} kg).")
 
 # Mutation selection
 mutation = st.selectbox("Select mutation", list(mutations.keys()))
@@ -145,7 +149,7 @@ if st.button("Calculate"):
     price *= (1 + friend_bonus_percent[friend_bonus_choice])
     
     st.success(
-        f"{crop} ({weight:.2f} kg, range {base_weight}-{max_weight} kg) "
+        f"{crop} ({weight:.2f} kg, normal range {base_weight}-{max_weight} kg) "
         f"with {mutation} mutation, weather {weather_base}/{weather_special}, "
         f"and friend bonus {friend_bonus_choice} sells for {price:,.0f} coins"
     )
