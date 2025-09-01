@@ -57,14 +57,14 @@ combined_weather = {
     ("Frozen", "Ambershine"): 14
 }
 
-# Friend bonus mapping
-friend_bonus = {
-    1: 0,
-    2: 0.10,
-    3: 0.20,
-    4: 0.30,
-    5: 0.40,
-    6: 0.50
+# Friend bonus percentages
+friend_bonus_percent = {
+    "0%": 0.0,
+    "10%": 0.10,
+    "20%": 0.20,
+    "30%": 0.30,
+    "40%": 0.40,
+    "50%": 0.50
 }
 
 st.title("Crop Sell Price Calculator with Mutations, Weather & Friend Bonus")
@@ -83,7 +83,7 @@ weather_base = st.selectbox("Select base weather", ["None", "Wet", "Chilled", "F
 weather_special = st.selectbox("Select special weather", ["None", "Dawnlit", "Ambershine"])
 
 # Friend bonus selection
-players = st.selectbox("Number of players on server", [1, 2, 3, 4, 5, 6])
+friend_bonus_choice = st.selectbox("Friend Bonus", ["0%", "10%", "20%", "30%", "40%", "50%"])
 
 # Calculate button
 if st.button("Calculate"):
@@ -104,7 +104,7 @@ if st.button("Calculate"):
         price *= weather_multipliers[weather_special]
     
     # Apply friend bonus
-    price *= (1 + friend_bonus[players])
+    price *= (1 + friend_bonus_percent[friend_bonus_choice])
     
     st.success(f"{crop} ({weight:.2f} kg) with {mutation} mutation, weather {weather_base}/{weather_special}, "
-               f"and {players} player(s) on the server sells for {price:,.0f} coins")
+               f"and friend bonus {friend_bonus_choice} sells for {price:,.0f} coins")
