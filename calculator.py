@@ -153,9 +153,33 @@ weight = st.number_input(
 
 # Check if weight is outside expected range
 if weight < base_weight:
-    st.warning(f"⚠️ This weight is below the normal base weight for {crop} ({base_weight} kg).")
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#5A0000;
+            padding:12px;
+            border-radius:8px;
+            color:#FFFFFF;
+            font-size:16px;">
+            ⚠️ This weight is <b>below</b> the normal base weight for <b>{crop}</b> ({base_weight} kg).
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 elif weight > max_weight:
-    st.warning(f"⚠️ This weight is above the normal max weight for {crop} ({max_weight} kg).")
+    st.markdown(
+        f"""
+        <div style="
+            background-color:#5A0000;
+            padding:12px;
+            border-radius:8px;
+            color:#FFFFFF;
+            font-size:16px;">
+            ⚠️ This weight is <b>above</b> the normal max weight for <b>{crop}</b> ({max_weight} kg).
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 # Mutation selection
 mutation = st.selectbox("Select mutation", list(mutations.keys()))
