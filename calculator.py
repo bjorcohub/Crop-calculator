@@ -8,6 +8,7 @@ prices = {
     "Blueberry": 23 / 0.01,
     "Apple": 73 / 0.18,
     "Tulip": 767 / 0.01,
+    "Tomato": 27 / 0.3,
     "Daffodil": 1090 / 0.01,
     "Corn": 36 / 1.2,
     "Watermelon": 2708 / 4.5,
@@ -30,12 +31,39 @@ prices = {
     "Starweaver": 10000000 / 10.0
 }
 
-# Mutations multipliers
-mutations = {
-    "None": 1,
-    "Golden": 25,
-    "Rainbow": 50
+# Base and max weights for crops
+weights = {
+    "Carrot": (0.1, 0.3),
+    "Strawberry": (0.05, 0.1),
+    "Aloe": (1.5, 3.8),
+    "Blueberry": (0.01, 0.02),
+    "Apple": (0.180, 0.360),
+    "Tulip": (0.01, 0.30),
+    "Tomato": (0.3, 0.6),
+    "Daffodil": (0.01, 0.03),
+    "Corn": (1.2, 2.4),
+    "Watermelon": (4.5, 13.5),
+    "Pumpkin": (6, 18),
+    "Echeveria": (0.8, 2.2),
+    "Coconut": (5, 15),
+    "Banana": (0.12, 0.204),
+    "Lily": (0.02, 0.055),
+    "Burro's Tail": (0.4, 1.0),
+    "Mushroom": (25, 87.5),
+    "Cactus": (1500, 2700),
+    "Bamboo": (1, 2),
+    "Grape": (3, 6),
+    "Pepper": (0.5, 1),
+    "Lemon": (0.5, 1.5),
+    "Passion Fruit": (9.5, 19),
+    "Dragon Fruit": (8.4, 16.8),
+    "Lychee": (9, 18),
+    "Sunflower": (10, 25),
+    "Starweaver": (10, 20)
 }
+
+# Mutations multipliers
+mutations = {"None": 1, "Golden": 25, "Rainbow": 50}
 
 # Weather multipliers
 weather_multipliers = {
@@ -47,7 +75,7 @@ weather_multipliers = {
     "Ambershine": 5
 }
 
-# Combined rules for stacking
+# Combined stacking rules
 combined_weather = {
     ("Wet", "Dawnlit"): 3,
     ("Chilled", "Dawnlit"): 3,
@@ -67,13 +95,22 @@ friend_bonus_percent = {
     "50%": 0.50
 }
 
-st.title("Crop Sell Price Calculator")
+st.title("Crop Sell Price Calculator 🌾")
 
 # Crop selection
 crop = st.selectbox("Select a crop", list(prices.keys()))
 
-# Weight input
-weight = st.number_input("Enter weight (kg)", min_value=0.01, value=1.0, step=0.01)
+# Get default weight from base value
+base_weight, max_weight = weights[crop]
+
+# Weight input defaults to base value
+weight = st.number_input(
+    "Enter weight (kg)", 
+    min_value=base_weight, 
+    max_value=max_weight, 
+    value=base_weight, 
+    step=0.01
+)
 
 # Mutation selection
 mutation = st.selectbox("Select mutation", list(mutations.keys()))
@@ -92,7 +129,7 @@ if st.button("Calculate"):
     # Apply mutation
     price *= mutations[mutation]
     
-    # Apply weather multiplier
+    # Apply weather multipliers
     if weather_base != "None" and weather_special != "None":
         price *= combined_weather.get(
             (weather_base, weather_special), 
@@ -106,5 +143,8 @@ if st.button("Calculate"):
     # Apply friend bonus
     price *= (1 + friend_bonus_percent[friend_bonus_choice])
     
-    st.success(f"{crop} ({weight:.2f} kg) with {mutation} mutation, weather {weather_base}/{weather_special}, "
-               f"and friend bonus {friend_bonus_choice} sells for {price:,.0f} coins")
+    st.success(
+        f"{crop} ({weight:.2f} kg, range {base_weight}-{max_weight} kg) "
+        f"with {mutation} mutation, weather {weather_base}/{weather_special}, "
+        f"and friend bonus {friend_bonus_choice} sells for {price:,.0f} coins"
+    )
