@@ -67,7 +67,7 @@ friend_bonus_percent = {
     "50%": 0.50
 }
 
-st.title("Crop Sell Price Calculator with Mutations, Weather & Friend Bonus")
+st.title("Crop Sell Price Calculator")
 
 # Crop selection
 crop = st.selectbox("Select a crop", list(prices.keys()))
