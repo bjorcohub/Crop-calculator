@@ -1,5 +1,47 @@
 import streamlit as st
 
+# Custom styles
+page_bg = """
+<style>
+    .stApp {
+        background-color: #3F6F17; /* Dark green background */
+        color: #F5F5DC; /* Cream text */
+    }
+
+    /* Calculator box */
+    .calculator-box {
+        background-color: #3B322B; /* Brown from your second image */
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 0px 15px rgba(0,0,0,0.5);
+    }
+
+    /* Make all text inside calculator white/cream */
+    .calculator-box * {
+        color: #F5F5DC !important;
+    }
+</style>
+"""
+
+st.markdown(page_bg, unsafe_allow_html=True)
+
+# Wrap calculator UI in the styled box
+with st.container():
+    st.markdown('<div class="calculator-box">', unsafe_allow_html=True)
+
+    st.header("🌱 Crop Calculator")
+    st.write("Select your crop, enter weight, and apply bonuses.")
+
+    # Example inputs (replace with your existing code)
+    crop = st.selectbox("Choose a crop:", ["Carrot", "Tomato", "Pumpkin"])
+    weight = st.number_input("Enter weight (kg)", min_value=0.0, step=0.01)
+    bonus = st.selectbox("Friend Bonus", ["0%", "10%", "20%", "30%", "40%", "50%"])
+
+    st.success(f"Results: {crop} at {weight}kg with {bonus} bonus!")
+
+    st.markdown('</div>', unsafe_allow_html=True)
+
+
 # Corrected price-per-kg table
 prices = {
     "Carrot": 18 / 0.1,
