@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Corrected price-per-kg table based on base sell price / base weight
+# Corrected price-per-kg table
 prices = {
     "Carrot": 18 / 0.1,
     "Strawberry": 14 / 0.05,
@@ -47,7 +47,7 @@ weather_multipliers = {
     "Ambershine": 5
 }
 
-# Combined rules for special stacking
+# Combined rules for stacking
 combined_weather = {
     ("Wet", "Dawnlit"): 3,
     ("Chilled", "Dawnlit"): 3,
@@ -57,7 +57,17 @@ combined_weather = {
     ("Frozen", "Ambershine"): 14
 }
 
-st.title("Crop Sell Price Calculator with Mutations & Weather")
+# Friend bonus mapping
+friend_bonus = {
+    1: 0,
+    2: 0.10,
+    3: 0.20,
+    4: 0.30,
+    5: 0.40,
+    6: 0.50
+}
+
+st.title("Crop Sell Price Calculator with Mutations, Weather & Friend Bonus")
 
 # Crop selection
 crop = st.selectbox("Select a crop", list(prices.keys()))
@@ -72,6 +82,9 @@ mutation = st.selectbox("Select mutation", list(mutations.keys()))
 weather_base = st.selectbox("Select base weather", ["None", "Wet", "Chilled", "Frozen"])
 weather_special = st.selectbox("Select special weather", ["None", "Dawnlit", "Ambershine"])
 
+# Friend bonus selection
+players = st.selectbox("Number of players on server", [1, 2, 3, 4, 5, 6])
+
 # Calculate button
 if st.button("Calculate"):
     price = prices[crop] * weight
@@ -81,10 +94,17 @@ if st.button("Calculate"):
     
     # Apply weather multiplier
     if weather_base != "None" and weather_special != "None":
-        price *= combined_weather.get((weather_base, weather_special), weather_multipliers[weather_base] * weather_multipliers[weather_special])
+        price *= combined_weather.get(
+            (weather_base, weather_special), 
+            weather_multipliers[weather_base] * weather_multipliers[weather_special]
+        )
     elif weather_base != "None":
         price *= weather_multipliers[weather_base]
     elif weather_special != "None":
         price *= weather_multipliers[weather_special]
     
-    st.success(f"{crop} ({weight:.2f} kg) with {mutation} mutation and weather {weather_base}/{weather_special} sells for {price:,.0f} coins")
+    # Apply friend bonus
+    price *= (1 + friend_bonus[players])
+    
+    st.success(f"{crop} ({weight:.2f} kg) with {mutation} mutation, weather {weather_base}/{weather_special}, "
+               f"and {players} player(s) on the server sells for {price:,.0f} coins")
