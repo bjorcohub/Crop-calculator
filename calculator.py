@@ -106,10 +106,11 @@ base_weight, max_weight = weights[crop]
 # Weight input (no enforced limits)
 weight = st.number_input(
     "Enter weight (kg)",
-    value=base_weight,
+    value=float(base_weight),  # force float to avoid mixed types
     step=0.01,
     format="%.3f"
 )
+
 
 # Check if weight is outside expected range
 if weight < base_weight:
